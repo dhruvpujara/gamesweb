@@ -1,0 +1,569 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2d3748;
+}
+
+/* Game Page Styles */
+.game-play-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.game-play-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    padding: 2rem;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 1000px;
+    height: 90vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Game Area */
+.game-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    position: relative;
+}
+
+/* Player 2 - Top Right */
+.player-top {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+.player2-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    padding: 1rem 1.8rem;
+    border-radius: 60px 60px 30px 30px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border: 3px solid white;
+}
+
+.player2-avatar {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ff6b6b;
+    font-size: 2.5rem;
+    border: 4px solid #feca57;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.player2-name {
+    font-weight: 700;
+    color: white;
+    font-size: 1.1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Colorful Game Board Middle */
+.game-middle {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg, #43e97b 0%, #38f9d7 100%);
+    border-radius: 30px;
+    margin: 1rem 0;
+    border: 4px solid white;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Decorative background pattern */
+.game-middle::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 10%, transparent 10%),
+        linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 30%);
+    background-size: 50px 50px, 100px 100px;
+    animation: backgroundMove 20s linear infinite;
+    opacity: 0.3;
+}
+
+@keyframes backgroundMove {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50px, -50px) rotate(10deg);
+    }
+}
+
+/* Floating decorative elements */
+.game-middle .decorative-circle {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    top: 20%;
+    left: 10%;
+    animation: float 6s ease-in-out infinite;
+}
+
+.game-middle .decorative-circle2 {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    bottom: 10%;
+    right: 5%;
+    animation: float 8s ease-in-out infinite reverse;
+}
+
+.game-middle .decorative-square {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(45deg);
+    top: 40%;
+    right: 20%;
+    animation: spin 10s linear infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translateY(-20px) scale(1.05);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Game controls placeholder */
+.game-controls {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    z-index: 10;
+}
+
+.control-item {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    min-width: 120px;
+    border: 3px solid #feca57;
+    transform: rotate(0deg);
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.control-item:hover {
+    transform: scale(1.05) rotate(2deg);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.control-item i {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.control-item span {
+    font-weight: 600;
+    color: #4a5568;
+}
+
+/* Animated dice */
+.dice {
+    width: 60px;
+    height: 60px;
+    background: white;
+    border-radius: 15px;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 8px;
+    gap: 4px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    animation: roll 3s infinite;
+}
+
+.dice-dot {
+    width: 12px;
+    height: 12px;
+    background: #ff6b6b;
+    border-radius: 50%;
+}
+
+@keyframes roll {
+
+    0%,
+    100% {
+        transform: rotate(0deg) scale(1);
+    }
+
+    25% {
+        transform: rotate(90deg) scale(1.1);
+    }
+
+    50% {
+        transform: rotate(180deg) scale(1);
+    }
+
+    75% {
+        transform: rotate(270deg) scale(1.1);
+    }
+}
+
+/* Player 1 - Bottom Left */
+.player-bottom {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 1rem;
+}
+
+.player1-container {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    padding: 1rem 2rem;
+    border-radius: 30px 60px 60px 30px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border: 3px solid white;
+}
+
+.player1-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.player1-avatar {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #667eea;
+    font-size: 2.5rem;
+    border: 4px solid #fbbf24;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.player1-name {
+    font-weight: 700;
+    color: white;
+    font-size: 1.1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Emoji Button */
+.emoji-button-container {
+    position: relative;
+}
+
+.emoji-btn {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border: 4px solid white;
+    animation: pulse 2s infinite;
+}
+
+.emoji-btn:hover {
+    transform: scale(1.1) rotate(10deg);
+    box-shadow: 0 15px 30px rgba(245, 158, 11, 0.4);
+}
+
+/* Emoji Picker */
+.emoji-picker {
+    position: absolute;
+    bottom: 70px;
+    left: 0;
+    background: white;
+    border-radius: 25px;
+    padding: 1.2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    display: none;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.8rem;
+    z-index: 100;
+    border: 4px solid #667eea;
+}
+
+.emoji-picker.show {
+    display: grid;
+}
+
+.emoji-option {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    cursor: pointer;
+    border-radius: 15px;
+    transition: all 0.2s;
+    background: #f7fafc;
+}
+
+.emoji-option:hover {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    transform: scale(1.2) rotate(5deg);
+    color: white;
+}
+
+/* Back Button */
+.back-circle {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s;
+    border: 4px solid white;
+}
+
+.back-circle i {
+    color: white;
+    font-size: 1.5rem;
+}
+
+.back-circle:hover {
+    transform: translateX(-50%) scale(1.15) rotate(360deg);
+    box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .game-controls {
+        gap: 1rem;
+    }
+
+    .control-item {
+        padding: 1rem;
+        min-width: 90px;
+    }
+
+    .player1-container {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+    }
+
+    .emoji-button-container {
+        align-self: flex-end;
+    }
+
+    .player1-avatar,
+    .player2-avatar {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+}
+
+
+
+
+
+/* Add these new styles to your existing gameboard.css */
+
+/* Game Code Flag */
+.game-code-flag {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    border: 3px solid white;
+    z-index: 20;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.game-code-flag i {
+    font-size: 1.2rem;
+    color: #fbbf24;
+}
+
+.game-code-flag strong {
+    background: white;
+    color: #667eea;
+    padding: 0.3rem 0.8rem;
+    border-radius: 30px;
+    margin-left: 0.3rem;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Player 2 - Flipped Upside Down */
+.player2-container.flipped {
+    transform: rotate(180deg);
+}
+
+.player2-container.flipped .player2-avatar {
+    transform: rotate(180deg);
+}
+
+.player2-container.flipped .player2-name {
+    transform: rotate(180deg);
+}
+
+/* Player 1 - Vertical Layout */
+.player1-container-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    padding: 1.5rem 1rem;
+    border-radius: 30px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border: 3px solid white;
+    min-width: 120px;
+}
+
+.player1-container-vertical .player1-avatar {
+    width: 70px;
+    height: 70px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #667eea;
+    font-size: 2.2rem;
+    border: 4px solid #fbbf24;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.player1-container-vertical .player1-name {
+    font-weight: 700;
+    color: white;
+    font-size: 1.1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    margin-bottom: 0.5rem;
+}
+
+/* Adjust emoji button position for vertical layout */
+.player1-container-vertical .emoji-button-container {
+    position: relative;
+    margin-top: 0.5rem;
+}
+
+/* Update responsive styles */
+@media (max-width: 600px) {
+    .game-code-flag {
+        top: 10px;
+        left: 10px;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .player1-container-vertical {
+        padding: 1rem;
+        min-width: 100px;
+    }
+
+    .player1-container-vertical .player1-avatar {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+}

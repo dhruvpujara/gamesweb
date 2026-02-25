@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games - GameHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/pages/gamespage.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-gamepad"></i>
+                <h2>GameHub</h2>
+            </div>
+            <div class="nav-links">
+                <a href="/login" class="login-btn">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Games Main Content -->
+    <main class="games-container">
+        <div class="games-card">
+            <h1>Games</h1>
+            <p>Choose a game to play</p>
+
+            <!-- Single Game Square with Buttons -->
+            <div class="game-square">
+                <div class="game-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <div class="game-info">
+                    <h3>Question & Answer</h3>
+                    <p>Create a new game or join an existing one</p>
+                </div>
+
+                <!-- Button Container -->
+                <div class="button-container">
+                    <a href="/queAndAns/create" class="game-btn create-btn">
+                        <i class="fas fa-plus-circle"></i> Create
+                    </a>
+                    <button class="game-btn join-btn" id="joinBtn">
+                        <i class="fas fa-sign-in-alt"></i> Join
+                    </button>
+                </div>
+            </div>
+
+            <!-- Circular Back Button -->
+            <a href="/" class="back-circle">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div>&copy; 2024 GameHub. All rights reserved.</div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-discord"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Join Game Modal -->
+    <div class="modal" id="joinModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModal">&times;</button>
+
+            <div class="modal-header">
+                <i class="fas fa-key"></i>
+                <h2>Join Game</h2>
+                <p>Enter 5-digit game code</p> <!-- Changed text from 6 to 5 -->
+            </div>
+
+            <div class="modal-body">
+                <!-- Remove form action, we'll handle with JavaScript -->
+                <div class="code-input-group">
+                    <input type="number" class="code-digit" max="9" min="0" maxlength="1" id="digit1" required>
+                    <input type="number" class="code-digit" max="9" min="0" maxlength="1" id="digit2" required>
+                    <input type="number" class="code-digit" max="9" min="0" maxlength="1" id="digit3" required>
+                    <input type="number" class="code-digit" max="9" min="0" maxlength="1" id="digit4" required>
+                    <input type="number" class="code-digit" max="9" min="0" maxlength="1" id="digit5" required>
+                    <!-- Removed the 6th digit input -->
+                </div>
+
+                <div class="error-message" id="errorMessage">
+                    Please enter all 5 digits <!-- Changed text from 6 to 5 -->
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="modal-btn cancel-btn" id="cancelBtn">Cancel</button>
+                    <button type="button" class="modal-btn submit-btn" id="submitBtn">
+                        Join Game
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get modal elements
+        const modal = document.getElementById('joinModal');
+        const joinBtn = document.getElementById('joinBtn');
+        const closeModal = document.getElementById('closeModal');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Get all digit inputs - now only 5
+        const digitInputs = [
+            document.getElementById('digit1'),
+            document.getElementById('digit2'),
+            document.getElementById('digit3'),
+            document.getElementById('digit4'),
+            document.getElementById('digit5')
+        ];
+
+        // Show modal when join button is clicked
+        joinBtn.addEventListener('click', () => {
+            modal.classList.add('show');
+            // Clear inputs
+            digitInputs.forEach(input => input.value = '');
+            errorMessage.classList.remove('show');
+            // Focus first input
+            setTimeout(() => digitInputs[0].focus(), 100);
+        });
+
+        // Hide modal functions
+        function hideModal() {
+            modal.classList.remove('show');
+        }
+
+        closeModal.addEventListener('click', hideModal);
+        cancelBtn.addEventListener('click', hideModal);
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                hideModal();
+            }
+        });
+
+        // Handle digit input navigation
+        digitInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                // Only allow single digit
+                if (e.target.value.length > 1) {
+                    e.target.value = e.target.value.slice(0, 1);
+                }
+
+                // Move to next input if value is entered
+                if (e.target.value && index < digitInputs.length - 1) {
+                    digitInputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                // Handle backspace
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    digitInputs[index - 1].focus();
+                }
+
+                // Handle arrow keys
+                if (e.key === 'ArrowLeft' && index > 0) {
+                    digitInputs[index - 1].focus();
+                }
+                if (e.key === 'ArrowRight' && index < digitInputs.length - 1) {
+                    digitInputs[index + 1].focus();
+                }
+            });
+
+            // Restrict to numbers only
+            input.addEventListener('keypress', (e) => {
+                if (!/^\d$/.test(e.key)) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Handle join button click
+        submitBtn.addEventListener('click', () => {
+            // Get the 5-digit code
+            const code = digitInputs.map(input => input.value).join('');
+
+            // Validate - now checking for 5 digits
+            if (code.length !== 5) {
+                errorMessage.classList.add('show');
+                return;
+            }
+
+            // Redirect to the desired URL format: /queAndAns/:code/join
+            window.location.href = `/queAndAns/${code}/join`;
+        });
+
+        // Also handle Enter key press on the last input
+        digitInputs[4].addEventListener('keypress', (e) => {  // Changed index from 5 to 4
+            if (e.key === 'Enter') {
+                const code = digitInputs.map(input => input.value).join('');
+
+                if (code.length === 5) {  // Changed from 6 to 5
+                    window.location.href = `/queAndAns/${code}/join`;
+                } else {
+                    errorMessage.classList.add('show');
+                }
+            }
+        });
+
+        // Remove error message when user starts typing
+        digitInputs.forEach(input => {
+            input.addEventListener('input', () => {
+                errorMessage.classList.remove('show');
+            });
+        });
+    </script>
+</body>
+
+</html>

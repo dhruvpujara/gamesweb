@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Board - GameHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/gamespage/queAndAns.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-gamepad"></i>
+                <h2>GameHub</h2>
+            </div>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/games">Games</a>
+                <a href="/profile">Profile</a>
+                <a href="/login" class="login-btn">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Game Board Main Content -->
+    <main class="game-board-container">
+        <div class="game-board-card">
+
+            <!-- Game Code in Top Right Corner (only gameCode passed) -->
+            <div class="game-code-corner">
+                <i class="fas fa-key"></i>
+                <span>Game Code</span>
+                <span class="code-value">
+                    <%= gameCode %>
+                </span>
+            </div>
+
+            <!-- Waiting Section -->
+            <div class="waiting-section">
+                <div class="waiting-icon">
+                    <i class="fas fa-hourglass-half"></i>
+                </div>
+
+                <div class="waiting-text">
+                    <h2>Waiting for Player 2</h2>
+                    <p>Share this game code with your friend</p>
+                </div>
+
+                <!-- Game Code Display in Center (optional - for easy sharing) -->
+                <div class="game-code-center">
+                    <i class="fas fa-key" style="margin-right: 0.5rem; color: #667eea;"></i>
+                    <span>
+                        <%= gameCode %>
+                    </span>
+                </div>
+
+                <!-- Players Status -->
+                <div class="players-status">
+                    <!-- Player 1 (You) -->
+                    <div class="player-indicator">
+                        <div class="player-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span class="player-name">You</span>
+                        <span class="player-status">
+                            <i class="fas fa-check-circle" style="color: #48bb78;"></i> Ready
+                        </span>
+                    </div>
+
+                    <!-- Player 2 (Waiting) -->
+                    <div class="player-indicator">
+                        <div class="player-avatar waiting">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span class="player-name">Player 2</span>
+                        <span class="player-status">
+                            <i class="fas fa-spinner fa-spin"></i> Waiting
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Loading Dots Animation -->
+                <div class="loading-dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+
+            <!-- Circular Back Button -->
+            <a href="/games" class="back-circle">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div>&copy; 2024 GameHub. All rights reserved.</div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-discord"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Optional: Copy game code to clipboard functionality
+        function copyGameCode() {
+            const gameCode = '<%= gameCode %>';
+            navigator.clipboard.writeText(gameCode).then(() => {
+                alert('Game code copied to clipboard!');
+            });
+        }
+
+        // Add click event to game code displays if you want copy functionality
+        document.querySelectorAll('.game-code-center, .code-value').forEach(el => {
+            el.addEventListener('click', copyGameCode);
+            el.style.cursor = 'pointer';
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Board - GameHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/gamespage/queAndAnsBoard.css">
+</head>
+
+<body>
+    <!-- Game Board Main Content -->
+    <main class="game-play-container">
+        <div class="game-play-card">
+            <!-- Game Code Flag - Only visible when isStarted is false -->
+            <% if (!isStarted) { %>
+                <div class="game-code-flag">
+                    <i class="fas fa-key"></i>
+                    <span>Game Code: <strong>
+                            <%= gameCode %>
+                        </strong></span>
+                </div>
+                <% } %>
+
+                    <!-- Game Area -->
+                    <div class="game-area">
+                        <!-- Player 2 - Top Right (Flipped Upside Down) -->
+                        <div class="player-top">
+                            <div class="player2-container flipped">
+                                <div class="player2-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <span class="player2-name">Player 2</span>
+                            </div>
+                        </div>
+
+                        <!-- Colorful Game Board Middle -->
+                        <div class="game-middle">
+                            <!-- Decorative elements -->
+                            <div class="decorative-circle"></div>
+                            <div class="decorative-circle2"></div>
+                            <div class="decorative-square"></div>
+
+                            <!-- Game controls placeholder -->
+                            <div class="game-controls">
+                                <div class="control-item">
+                                    <i class="fas fa-dice"></i>
+                                    <span>Roll Dice</span>
+                                    <div class="dice">
+                                        <div class="dice-dot"></div>
+                                        <div class="dice-dot"></div>
+                                        <div class="dice-dot"></div>
+                                        <div class="dice-dot"></div>
+                                    </div>
+                                </div>
+
+                                <div class="control-item">
+                                    <i class="fas fa-chess-pawn"></i>
+                                    <span>Move</span>
+                                    <i class="fas fa-arrow-right" style="color: #667eea; font-size: 1.2rem;"></i>
+                                </div>
+
+                                <div class="control-item">
+                                    <i class="fas fa-hand-paper"></i>
+                                    <span>Action</span>
+                                    <i class="fas fa-bolt" style="color: #fbbf24; font-size: 1.2rem;"></i>
+                                </div>
+
+                                <div class="control-item">
+                                    <i class="fas fa-star"></i>
+                                    <span>Power</span>
+                                    <i class="fas fa-crown" style="color: #ff6b6b; font-size: 1.2rem;"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Player 1 - Bottom Left (Vertical Layout) -->
+                        <div class="player-bottom">
+                            <div class="player1-container-vertical">
+                                <div class="player1-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <span class="player1-name">You</span>
+
+                                <!-- Emoji Button (Below player info) -->
+                                <div class="emoji-button-container">
+                                    <button class="emoji-btn" id="emojiBtn">
+                                        <i class="far fa-smile"></i>
+                                    </button>
+
+                                    <!-- Emoji Picker -->
+                                    <div class="emoji-picker" id="emojiPicker">
+                                        <div class="emoji-option">😊</div>
+                                        <div class="emoji-option">😂</div>
+                                        <div class="emoji-option">😎</div>
+                                        <div class="emoji-option">😍</div>
+                                        <div class="emoji-option">👍</div>
+                                        <div class="emoji-option">👏</div>
+                                        <div class="emoji-option">🎉</div>
+                                        <div class="emoji-option">🔥</div>
+                                        <div class="emoji-option">⚡</div>
+                                        <div class="emoji-option">💯</div>
+                                        <div class="emoji-option">❓</div>
+                                        <div class="emoji-option">💪</div>
+                                        <div class="emoji-option">🎮</div>
+                                        <div class="emoji-option">🎲</div>
+                                        <div class="emoji-option">🏆</div>
+                                        <div class="emoji-option">🎯</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Circular Back Button -->
+                    <a href="/games" class="back-circle">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+        </div>
+    </main>
+
+    <script>
+        // Emoji picker functionality
+        const emojiBtn = document.getElementById('emojiBtn');
+        const emojiPicker = document.getElementById('emojiPicker');
+
+        emojiBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            emojiPicker.classList.toggle('show');
+        });
+
+        // Close emoji picker when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!emojiBtn.contains(e.target) && !emojiPicker.contains(e.target)) {
+                emojiPicker.classList.remove('show');
+            }
+        });
+
+        // Handle emoji selection
+        document.querySelectorAll('.emoji-option').forEach(emoji => {
+            emoji.addEventListener('click', () => {
+                const selectedEmoji = emoji.textContent;
+                console.log('Selected emoji:', selectedEmoji);
+
+                // Visual feedback
+                emojiBtn.innerHTML = selectedEmoji;
+                setTimeout(() => {
+                    emojiBtn.innerHTML = '<i class="far fa-smile"></i>';
+                }, 2000);
+
+                emojiPicker.classList.remove('show');
+            });
+        });
+
+        // Interactive control items
+        document.querySelectorAll('.control-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.style.animation = 'pulse 0.5s';
+                setTimeout(() => {
+                    item.style.animation = '';
+                }, 500);
+            });
+        });
+    </script>
+</body>
+
+</html>
