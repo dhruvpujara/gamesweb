@@ -1,7 +1,8 @@
 const queAndAnsModel = require("../../model/gameModel/queAndAns");
+const { getIO } = require("../../config/socketConfig");
 
 
-
+// functions 
 module.exports.createGame = async (req, res) => {
     try {
         const code = Math.floor(Math.random() * 100000);
@@ -49,13 +50,24 @@ module.exports.joinGame = async (req, res) => {
         game.players.push(player2);
         game.isStarted = true;
         game.noOfPlayers = game.noOfPlayers + 1;
+        game.turnOf = game.socketConfig[0]; // Assuming the first player to join starts the game
         await game.save();
-        console.log(game);
 
         res.cookie('player', player2, {
             maxAge: 24 * 60 * 60 * 1000, // 24 hours
             httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
             sameSite: 'lax' // Protects against CSRF
+        });
+
+        // ✅ Emit socket event to notify player 1 that player 2 has joined
+        const roomName = `game_${code}`;
+        const io = getIO();
+        io.to(roomName).emit('playerJoinedGame', {
+            message: 'Opponent has joined the game',
+            gameCode: code,
+            isStarted: true,
+            player2Id: player2,
+            totalPlayers: game.noOfPlayers
         });
 
         res.render("games/queAndAnsBoard", { gameCode: code, isStarted: game.isStarted });
@@ -69,3 +81,6 @@ module.exports.joinGame = async (req, res) => {
 module.exports.board = async (req, res) => {
     res.render("games/queAndAnsBoard");
 };
+
+
+// receiving updates from client side 

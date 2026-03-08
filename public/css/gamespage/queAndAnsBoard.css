@@ -31,7 +31,7 @@ body {
     padding: 2rem;
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
     width: 100%;
-    max-width: 1000px;
+    max-width: 1200px;
     height: 90vh;
     position: relative;
     display: flex;
@@ -47,6 +47,8 @@ body {
     justify-content: space-between;
     height: 100%;
     position: relative;
+    max-height: calc(90vh - 200px);
+    overflow: hidden;
 }
 
 /* Player 2 - Top Right */
@@ -91,17 +93,21 @@ body {
 
 /* Colorful Game Board Middle */
 .game-middle {
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     background: linear-gradient(145deg, #43e97b 0%, #38f9d7 100%);
-    border-radius: 30px;
-    margin: 1rem 0;
+    border-radius: 50%;
+    margin: 0.5rem auto;
     border: 4px solid white;
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
     position: relative;
     overflow: hidden;
+    min-width: 500px;
+    min-height: 500px;
+    width: 500px;
+    height: 500px;
+    flex-shrink: 0;
 }
 
 /* Decorative background pattern */
@@ -272,7 +278,8 @@ body {
 .player-bottom {
     display: flex;
     justify-content: flex-start;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
+    flex-shrink: 0;
 }
 
 .player1-container {
@@ -544,7 +551,7 @@ body {
 /* Adjust emoji button position for vertical layout */
 .player1-container-vertical .emoji-button-container {
     position: relative;
-    margin-top: 0.5rem;
+    margin-top: 0.2rem;
 }
 
 /* Update responsive styles */
@@ -565,5 +572,756 @@ body {
         width: 60px;
         height: 60px;
         font-size: 2rem;
+    }
+}
+
+/* ✅ Question Modal Styles */
+.question-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.question-modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.question-modal {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 20px;
+    padding: 0;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    animation: slideIn 0.3s ease;
+    overflow: hidden;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.question-modal-header {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.question-modal-header h2 {
+    color: white;
+    font-size: 1.8rem;
+    margin: 0;
+    font-weight: 600;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+.close-modal-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.question-modal-body {
+    padding: 2rem;
+}
+
+.turn-message {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.question-input-field {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1rem;
+    color: #2d3748;
+    background: rgba(255, 255, 255, 0.95);
+    resize: vertical;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.question-input-field:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.question-input-field::placeholder {
+    color: rgba(45, 55, 72, 0.6);
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.btn-submit-question,
+.btn-cancel-question {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-submit-question {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    flex: 1;
+}
+
+.btn-submit-question:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+}
+
+.btn-submit-question:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.btn-submit-question:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.btn-cancel-question {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-cancel-question:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.btn-cancel-question:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 600px) {
+    .question-modal {
+        width: 95%;
+        max-width: none;
+    }
+
+    .question-modal-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .question-modal-body {
+        padding: 1.5rem;
+    }
+
+    .modal-buttons {
+        flex-direction: column-reverse;
+    }
+
+    .btn-submit-question,
+    .btn-cancel-question {
+        width: 100%;
+    }
+}
+
+/* ✅ Opponent Question Display */
+.opponent-question-display {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1500;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.opponent-question-content {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    position: relative;
+    width: 90%;
+    max-width: 600px;
+}
+
+.question-heading {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.question-text {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.5;
+    word-wrap: break-word;
+    padding-right: 2rem;
+}
+
+.close-question-display {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    color: white;
+    font-size: 1.8rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.close-question-display:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* ✅ Timer Styles */
+.answer-timer {
+    position: absolute;
+    top: -1.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    color: #f59e0b;
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    min-width: 60px;
+    text-align: center;
+}
+
+.answer-timer.warning {
+    background: #ff6b6b;
+    color: white;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: translateX(-50%) scale(1);
+    }
+
+    50% {
+        transform: translateX(-50%) scale(1.05);
+    }
+}
+
+/* ✅ Correct Answer Highlight */
+.option-btn.correct {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    border-color: #4CAF50;
+    color: white;
+}
+
+.option-btn.selected.wrong {
+    background: rgba(255, 0, 0, 0.3);
+    border-color: #ff6b6b;
+    color: white;
+}
+
+.option-btn.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ✅ Options Container (for asking questions) */
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.options-container label {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.option-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 0.95rem;
+    color: #2d3748;
+    background: rgba(255, 255, 255, 0.95);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.option-input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.option-input::placeholder {
+    color: rgba(45, 55, 72, 0.6);
+}
+
+.option-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.option-row .option-input {
+    flex: 1;
+    margin: 0;
+}
+
+.option-checkbox {
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    accent-color: #4CAF50;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 2px solid #4CAF50;
+    transition: all 0.3s ease;
+}
+
+.option-checkbox:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+}
+
+.option-checkbox:checked {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+}
+
+.mark-answer-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+/* ✅ Options Buttons Group (for answering questions) */
+.options-buttons-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.option-btn {
+    padding: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.option-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.7);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.option-btn:active {
+    transform: translateY(0);
+}
+
+.option-a::before {
+    content: 'A) ';
+    font-weight: 700;
+}
+
+.option-b::before {
+    content: 'B) ';
+    font-weight: 700;
+}
+
+.option-c::before {
+    content: 'C) ';
+    font-weight: 700;
+}
+
+.option-d::before {
+    content: 'D) ';
+    font-weight: 700;
+}
+
+@media (max-width: 600px) {
+    .opponent-question-display {
+        top: 10px;
+        right: 10px;
+        max-width: calc(100vw - 20px);
+    }
+
+    .opponent-question-content {
+        padding: 1rem;
+    }
+
+    .question-heading {
+        font-size: 1rem;
+    }
+
+    .question-text {
+        font-size: 0.95rem;
+    }
+
+    .options-buttons-group {
+        grid-template-columns: 1fr;
+    }
+
+    .option-btn {
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* ✅ Circular Board Styles */
+.circular-board {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.board-heading {
+    position: relative;
+    z-index: 25;
+    text-align: center;
+}
+
+.board-heading h1 {
+    font-size: 4rem;
+    font-weight: 900;
+    color: rgba(102, 126, 234, 0.95);
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+    letter-spacing: 3px;
+    margin: 0;
+}
+
+/* Circle Container for both inner and outer circles */
+.circle-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Inner Circle - smaller radius */
+.inner-circle {
+    z-index: 15;
+}
+
+/* Outer Circle - larger radius */
+.outer-circle {
+    z-index: 12;
+}
+
+/* Individual Square Styles - Base */
+.square {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+    border: 3px solid white;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.square:hover {
+    transform: scale(1.15);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.85));
+}
+
+.square:active {
+    transform: scale(0.95);
+}
+
+/* Outer Circle Squares - Larger Size */
+.outer-circle .square {
+    width: 70px;
+    height: 70px;
+}
+
+/* Position squares in inner circle */
+.inner-circle .square {
+    --angle: calc(var(--index) * 36deg);
+    --radius: 90px;
+    transform:
+        rotate(var(--angle)) translateY(calc(-1 * var(--radius))) rotate(calc(-1 * var(--angle)));
+}
+
+/* Position squares in outer circle */
+.outer-circle .square {
+    --angle: calc(var(--index) * 36deg);
+    --radius: 210px;
+    transform:
+        rotate(var(--angle)) translateY(calc(-1 * var(--radius))) rotate(calc(-1 * var(--angle)));
+}
+
+/* Direction Arrows */
+.direction-arrow {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    z-index: 20;
+}
+
+.top-arrow {
+    top: 50%;
+    left: 30%;
+    transform: translateY(-50%);
+}
+
+.top-arrow::before,
+.top-arrow::after {
+    content: '';
+    position: absolute;
+    background: rgba(102, 126, 234, 0.5);
+}
+
+.top-arrow::before {
+    width: 3px;
+    height: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+.bottom-arrow {
+    bottom: 50%;
+    right: 30%;
+    transform: translateY(50%);
+}
+
+.bottom-arrow::before,
+.bottom-arrow::after {
+    content: '';
+    position: absolute;
+    background: rgba(102, 126, 234, 0.5);
+}
+
+.bottom-arrow::before {
+    width: 3px;
+    height: 50px;
+    right: 50%;
+    transform: translateX(50%);
+    border-radius: 2px;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .game-middle {
+        min-width: 420px;
+        min-height: 420px;
+        width: 420px;
+        height: 420px;
+    }
+
+    .board-heading h1 {
+        font-size: 3rem;
+    }
+
+    .square {
+        width: 45px;
+        height: 45px;
+    }
+
+    .outer-circle .square {
+        width: 60px;
+        height: 60px;
+    }
+
+    .inner-circle .square {
+        --radius: 75px;
+    }
+
+    .outer-circle .square {
+        --radius: 175px;
+    }
+}
+
+@media (max-width: 600px) {
+    .game-middle {
+        min-width: 300px;
+        min-height: 300px;
+        width: 300px;
+        height: 300px;
+    }
+
+    .board-heading h1 {
+        font-size: 2rem;
+    }
+
+    .square {
+        width: 35px;
+        height: 35px;
+    }
+
+    .outer-circle .square {
+        width: 50px;
+        height: 50px;
+    }
+
+    .inner-circle .square {
+        --radius: 55px;
+    }
+
+    .outer-circle .square {
+        --radius: 130px;
+    }
+}
+
+/* ✅ Typing Animation for Opponent */
+.typing-animation-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1500;
+    animation: slideInRight 0.3s ease;
+    max-width: 400px;
+}
+
+.typing-animation-content {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    position: relative;
+}
+
+.typing-animation-text {
+    font-size: 1rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 0.5rem;
+}
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.typing-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.95);
+    animation: typingAnimation 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typingAnimation {
+
+    0%,
+    60%,
+    100% {
+        opacity: 0.5;
+        transform: translateY(0);
+    }
+
+    30% {
+        opacity: 1;
+        transform: translateY(-10px);
     }
 }

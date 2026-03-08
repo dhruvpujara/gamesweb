@@ -23,6 +23,7 @@
                 </div>
                 <% } %>
 
+                    <input type="hidden" id="gameCode" value="<%= gameCode %>">
                     <!-- Game Area -->
                     <div class="game-area">
                         <!-- Player 2 - Top Right (Flipped Upside Down) -->
@@ -35,43 +36,46 @@
                             </div>
                         </div>
 
-                        <!-- Colorful Game Board Middle -->
+                        <!-- Circular Game Board Middle -->
                         <div class="game-middle">
-                            <!-- Decorative elements -->
-                            <div class="decorative-circle"></div>
-                            <div class="decorative-circle2"></div>
-                            <div class="decorative-square"></div>
-
-                            <!-- Game controls placeholder -->
-                            <div class="game-controls">
-                                <div class="control-item">
-                                    <i class="fas fa-dice"></i>
-                                    <span>Roll Dice</span>
-                                    <div class="dice">
-                                        <div class="dice-dot"></div>
-                                        <div class="dice-dot"></div>
-                                        <div class="dice-dot"></div>
-                                        <div class="dice-dot"></div>
-                                    </div>
+                            <!-- Circular Board Container -->
+                            <div class="circular-board">
+                                <!-- Center Heading -->
+                                <div class="board-heading">
+                                    <h1>Q&A</h1>
                                 </div>
 
-                                <div class="control-item">
-                                    <i class="fas fa-chess-pawn"></i>
-                                    <span>Move</span>
-                                    <i class="fas fa-arrow-right" style="color: #667eea; font-size: 1.2rem;"></i>
+                                <!-- Inner Circle of Squares (10 squares) -->
+                                <div class="circle-container inner-circle">
+                                    <div class="square" style="--index: 0;"></div>
+                                    <div class="square" style="--index: 1;"></div>
+                                    <div class="square" style="--index: 2;"></div>
+                                    <div class="square" style="--index: 3;"></div>
+                                    <div class="square" style="--index: 4;"></div>
+                                    <div class="square" style="--index: 5;"></div>
+                                    <div class="square" style="--index: 6;"></div>
+                                    <div class="square" style="--index: 7;"></div>
+                                    <div class="square" style="--index: 8;"></div>
+                                    <div class="square" style="--index: 9;"></div>
                                 </div>
 
-                                <div class="control-item">
-                                    <i class="fas fa-hand-paper"></i>
-                                    <span>Action</span>
-                                    <i class="fas fa-bolt" style="color: #fbbf24; font-size: 1.2rem;"></i>
+                                <!-- Outer Circle of Squares (10 squares) -->
+                                <div class="circle-container outer-circle">
+                                    <div class="square" style="--index: 0;"></div>
+                                    <div class="square" style="--index: 1;"></div>
+                                    <div class="square" style="--index: 2;"></div>
+                                    <div class="square" style="--index: 3;"></div>
+                                    <div class="square" style="--index: 4;"></div>
+                                    <div class="square" style="--index: 5;"></div>
+                                    <div class="square" style="--index: 6;"></div>
+                                    <div class="square" style="--index: 7;"></div>
+                                    <div class="square" style="--index: 8;"></div>
+                                    <div class="square" style="--index: 9;"></div>
                                 </div>
 
-                                <div class="control-item">
-                                    <i class="fas fa-star"></i>
-                                    <span>Power</span>
-                                    <i class="fas fa-crown" style="color: #ff6b6b; font-size: 1.2rem;"></i>
-                                </div>
+                                <!-- Direction Arrows -->
+                                <div class="direction-arrow top-arrow"></div>
+                                <div class="direction-arrow bottom-arrow"></div>
                             </div>
                         </div>
 
@@ -120,7 +124,130 @@
         </div>
     </main>
 
+    <!-- Question Input Modal -->
+    <div class="question-modal-overlay" id="questionModalOverlay">
+        <div class="question-modal">
+            <div class="question-modal-header" style="text-align: center;">
+                <h2>Your Turn! 🎯</h2>
+            </div>
+            <div class="question-modal-body">
+                <p class="turn-message">It's your turn to ask a question!</p>
+                <textarea id="questionInput" class="question-input-field" placeholder="Enter your question here..."
+                    rows="4"></textarea>
+
+                <!-- Options Inputs -->
+                <div class="options-container">
+                    <div class="option-row">
+                        <input type="text" id="optionA" class="option-input" placeholder="Enter option A">
+                        <input type="checkbox" id="checkboxA" class="option-checkbox">
+                    </div>
+                    <div class="option-row">
+                        <input type="text" id="optionB" class="option-input" placeholder="Enter option B">
+                        <input type="checkbox" id="checkboxB" class="option-checkbox">
+                    </div>
+                    <div class="option-row">
+                        <input type="text" id="optionC" class="option-input" placeholder="Enter option C">
+                        <input type="checkbox" id="checkboxC" class="option-checkbox">
+                    </div>
+                    <div class="option-row">
+                        <input type="text" id="optionD" class="option-input" placeholder="Enter option D">
+                        <input type="checkbox" id="checkboxD" class="option-checkbox">
+                    </div>
+                    <div class="mark-answer-text">mark the right answer</div>
+                </div>
+
+                <div class="modal-buttons">
+                    <button class="btn-submit-question" id="submitQuestionBtn" disabled>Submit Question</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include socket.io client library -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="/js/socket.js"></script>
+
     <script>
+        // ✅ Question Modal Event Listeners
+        const submitQuestionBtn = document.getElementById('submitQuestionBtn');
+        const questionModalOverlay = document.getElementById('questionModalOverlay');
+        const questionInput = document.getElementById('questionInput');
+        const optionInputs = [
+            document.getElementById('optionA'),
+            document.getElementById('optionB'),
+            document.getElementById('optionC'),
+            document.getElementById('optionD')
+        ];
+        const optionCheckboxes = [
+            document.getElementById('checkboxA'),
+            document.getElementById('checkboxB'),
+            document.getElementById('checkboxC'),
+            document.getElementById('checkboxD')
+        ];
+
+        // ✅ Validate all fields and enable/disable submit button
+        function validateQuestionForm() {
+            const question = questionInput.value.trim();
+            const allOptionsEmpty = optionInputs.every(input => input.value.trim() === '');
+            const atLeastOneChecked = optionCheckboxes.some(checkbox => checkbox.checked);
+
+            // Check if question is empty or all options are empty or no checkbox selected
+            if (!question || allOptionsEmpty || !atLeastOneChecked) {
+                submitQuestionBtn.disabled = true;
+                submitQuestionBtn.style.opacity = '0.5';
+            } else {
+                // Check if all individual options are filled
+                const allOptionsFilled = optionInputs.every(input => input.value.trim() !== '');
+                if (allOptionsFilled && atLeastOneChecked) {
+                    submitQuestionBtn.disabled = false;
+                    submitQuestionBtn.style.opacity = '1';
+                } else {
+                    submitQuestionBtn.disabled = true;
+                    submitQuestionBtn.style.opacity = '0.5';
+                }
+            }
+        }
+
+        // ✅ Handle mutually exclusive checkboxes
+        optionCheckboxes.forEach((checkbox) => {
+            checkbox.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    // Uncheck all other checkboxes
+                    optionCheckboxes.forEach((cb) => {
+                        if (cb !== e.target) {
+                            cb.checked = false;
+                        }
+                    });
+                }
+                validateQuestionForm();
+            });
+        });
+
+        // Add validation listeners
+        questionInput.addEventListener('input', validateQuestionForm);
+        optionInputs.forEach(input => {
+            input.addEventListener('input', validateQuestionForm);
+        });
+
+        submitQuestionBtn.addEventListener('click', submitQuestion);
+
+        // Close modal when clicking outside
+        questionModalOverlay.addEventListener('click', (e) => {
+            if (e.target === questionModalOverlay) {
+                hideQuestionModal();
+            }
+        });
+
+        // Allow Enter key to submit question (Shift + Enter for new line)
+        questionInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                submitQuestion();
+            }
+        });
+
         // Emoji picker functionality
         const emojiBtn = document.getElementById('emojiBtn');
         const emojiPicker = document.getElementById('emojiPicker');
@@ -143,6 +270,16 @@
                 const selectedEmoji = emoji.textContent;
                 console.log('Selected emoji:', selectedEmoji);
 
+                // Emit websocket event for sending emoji
+                const gameCodeInput = document.getElementById('gameCode');
+                if (gameCodeInput && socket) {
+                    socket.emit('sentEmoji', {
+                        senderId: socket.id,
+                        emoji: selectedEmoji,
+                        gameCode: gameCodeInput.value
+                    });
+                }
+
                 // Visual feedback
                 emojiBtn.innerHTML = selectedEmoji;
                 setTimeout(() => {
@@ -163,6 +300,7 @@
             });
         });
     </script>
+
 </body>
 
 </html>

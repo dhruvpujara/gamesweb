@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { options } = require("../../routes/userRoutes/userRoutes");
+const socketConfig = require("../../config/socketConfig");
 
 const queAndAnsSchema = new mongoose.Schema({
     code: {
@@ -27,7 +28,19 @@ const queAndAnsSchema = new mongoose.Schema({
         type: Number,
         required: true,
         default: 0
-    }
+    },
+    turnOf: {
+        type: String,
+        default: ""
+    },
+    turnToAnswer: {
+        type: String,
+        default: ""
+    },
+    socketConfig: [{
+        type: String,
+        default: ""
+    }]
 });
 
 const queAndAnsModel = mongoose.model("queAndAns", queAndAnsSchema);
