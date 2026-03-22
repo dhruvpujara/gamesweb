@@ -87,6 +87,12 @@ function initializeSocket() {
         showTypingAnimation();
     });
 
+    // ✅ Listen for game over event
+    socket.on('gameOver', (data) => {
+        console.log('Game Over! Winner:', data.winner, 'Your socket ID:', socket.id);
+        showGameOverPoster(data.winner);
+    });
+
     // Send your move to opponent
     window.sendMove = function (moveData) {
         socket.emit('gameUpdate', {
@@ -328,10 +334,14 @@ function handleAnswerSelection(selectedOption, questionData, isCorrect, buttonEl
         });
     }
 
+    // Get the actual option string instead of just the letter
+    const optionString = questionData.options[selectedOption];
+
     // Emit the selected answer to server with socket ID
     socket.emit('queAnswered', {
         gameCode: gameCode,
-        selectedOption: selectedOption,
+        selectedOption: optionString,
+        selectedOptionLabel: selectedOption,
         questionId: questionData.questionId || null,
         answeredBy: socket.id,  // Send the socket ID of who answered
         isCorrect: isCorrect
@@ -344,7 +354,7 @@ function handleAnswerSelection(selectedOption, questionData, isCorrect, buttonEl
         if (questionDisplay && questionDisplay.parentElement) {
             questionDisplay.remove();
         }
-    }, 2000);
+    }, 3000);
 }
 
 // ✅ Function to show typing animation when opponent is typing
@@ -380,4 +390,45 @@ function hideTypingAnimation() {
         typingContainer.remove();
     }
 }
+
+// ✅ Function to show game over poster
+function showGameOverPoster(winnerId) {
+    // Remove any existing game over poster
+    const existingPoster = document.querySelector('.game-over-poster');
+    if (existingPoster) {
+        existingPoster.remove();
+    }
+
+    // Determine if current player is the winner
+    const isWinner = socket.id === winnerId;
+    const title = isWinner ? '🎉 You Won! 🎉' : '😔 You Lost 😔';
+    const message = isWinner ? 'Congratulations! You reached 10 points first!' : 'Better luck next time!';
+    const posterClass = isWinner ? 'winner' : 'loser';
+
+    // Create game over poster
+    const poster = document.createElement('div');
+    poster.className = `game-over-poster ${posterClass}`;
+    poster.innerHTML = `
+        <div class="game-over-content">
+            <div class="game-over-title">${title}</div>
+            <div class="game-over-message">${message}</div>
+            <button class="game-over-btn" onclick="redirectToHome()">Back to Home</button>
+        </div>
+    `;
+
+    // Append to game board container instead of body
+    const gameBoardContainer = document.querySelector('.game-board-container');
+    if (gameBoardContainer) {
+        gameBoardContainer.appendChild(poster);
+    } else {
+        // Fallback to body if container not found
+        document.body.appendChild(poster);
+    }
+}
+
+// ✅ Function to redirect to home page
+window.redirectToHome = function () {
+    window.location.href = '/pages/gamespage';
+};
+
 

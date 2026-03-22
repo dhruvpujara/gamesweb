@@ -40,6 +40,10 @@ const queAndAnsSchema = new mongoose.Schema({
     socketConfig: [{
         type: String,
         default: ""
+    }],
+    points: [{
+        type: Object,
+        default: { Player: "", points: 0 }
     }]
 });
 

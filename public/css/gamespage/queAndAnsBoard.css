@@ -4,6 +4,154 @@
     box-sizing: border-box;
 }
 
+
+
+
+
+
+/* Game Over Poster Styles */
+.game-over-poster {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    margin: 0;
+    padding: 0;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.game-over-poster.winner {
+    background: rgba(34, 197, 94, 0.5);
+}
+
+.game-over-poster.loser {
+    background: rgba(239, 68, 68, 0.5);
+}
+
+.game-over-content {
+    background: white;
+    border-radius: 30px;
+    padding: 3rem 2rem;
+    text-align: center;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+    max-width: 500px;
+    width: 90%;
+    animation: slideUp 0.5s ease-out;
+    position: relative;
+    z-index: 1001;
+}
+
+.game-over-poster.winner .game-over-content {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    border: 3px solid #22c55e;
+}
+
+.game-over-poster.loser .game-over-content {
+    background: linear-gradient(135deg, #ffebee, #ffcdd2);
+    border: 3px solid #ef4444;
+}
+
+.game-over-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: #2d3748;
+}
+
+.game-over-poster.winner .game-over-title {
+    color: #22c55e;
+}
+
+.game-over-poster.loser .game-over-title {
+    color: #ef4444;
+}
+
+.game-over-message {
+    font-size: 1.4rem;
+    color: #2d3748;
+    margin-bottom: 2.5rem;
+    font-weight: 600;
+    line-height: 1.8;
+}
+
+.game-over-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none !important;
+    padding: 1.2rem 3rem !important;
+    border-radius: 50px !important;
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4) !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+}
+
+.game-over-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5) !important;
+}
+
+.game-over-btn:active {
+    transform: translateY(-1px);
+}
+
+.game-over-poster.winner .game-over-btn {
+    background: linear-gradient(135deg, #22c55e, #10b981) !important;
+    box-shadow: 0 10px 30px rgba(34, 197, 94, 0.4) !important;
+}
+
+.game-over-poster.winner .game-over-btn:hover {
+    box-shadow: 0 15px 40px rgba(34, 197, 94, 0.5) !important;
+}
+
+.game-over-poster.loser .game-over-btn {
+    background: linear-gradient(135deg, #ef4444, #ec4899) !important;
+    box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4) !important;
+}
+
+.game-over-poster.loser .game-over-btn:hover {
+    box-shadow: 0 15px 40px rgba(239, 68, 68, 0.5) !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+
+
+
+
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #667eea, #764ba2);
@@ -48,7 +196,6 @@ body {
     height: 100%;
     position: relative;
     max-height: calc(90vh - 200px);
-    overflow: hidden;
 }
 
 /* Player 2 - Top Right */
@@ -324,6 +471,10 @@ body {
 /* Emoji Button */
 .emoji-button-container {
     position: relative;
+    /* Remove any overflow hidden */
+    overflow: visible;
+    /* Ensure it's clickable */
+    z-index: 31;
 }
 
 .emoji-btn {
@@ -363,7 +514,11 @@ body {
     gap: 0.8rem;
     z-index: 100;
     border: 4px solid #667eea;
+    /* Add these */
+    opacity: 1;
+    visibility: visible;
 }
+
 
 .emoji-picker.show {
     display: grid;
@@ -517,7 +672,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.8rem;
+    gap: 0.6rem;
     background: linear-gradient(135deg, #667eea, #764ba2);
     padding: 1.5rem 1rem;
     border-radius: 30px;
@@ -551,7 +706,7 @@ body {
 /* Adjust emoji button position for vertical layout */
 .player1-container-vertical .emoji-button-container {
     position: relative;
-    margin-top: 0.2rem;
+    margin-top: 0.5rem;
 }
 
 /* Update responsive styles */
@@ -564,7 +719,7 @@ body {
     }
 
     .player1-container-vertical {
-        padding: 1rem;
+        padding: 0.5rem 1rem;
         min-width: 100px;
     }
 
@@ -572,6 +727,10 @@ body {
         width: 60px;
         height: 60px;
         font-size: 2rem;
+    }
+
+    .player1-container-vertical .emoji-button-container {
+        margin-top: 0.25rem;
     }
 }
 
@@ -1323,5 +1482,265 @@ body {
     30% {
         opacity: 1;
         transform: translateY(-10px);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ✅ Typing Animation for Opponent */
+
+
+
+
+
+/* Game Board Page Styles */
+.game-board-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.game-board-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 800px;
+    min-height: 500px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Game Code in Top Right Corner */
+.game-code-corner {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 3px solid white;
+    z-index: 10;
+}
+
+.game-code-corner i {
+    font-size: 1.2rem;
+}
+
+.code-value {
+    background: white;
+    color: #667eea;
+    padding: 0.2rem 0.8rem;
+    border-radius: 25px;
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* Waiting Section */
+.waiting-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.waiting-icon {
+    font-size: 5rem;
+    color: #667eea;
+    animation: pulse 2s infinite;
+}
+
+.waiting-text {
+    text-align: center;
+}
+
+.waiting-text h2 {
+    font-size: 2rem;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+}
+
+.waiting-text p {
+    color: #718096;
+    font-size: 1.1rem;
+}
+
+/* Player Status */
+.players-status {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 1rem;
+}
+
+.player-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.player-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    position: relative;
+}
+
+.player-avatar.waiting::after {
+    content: '';
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 3px solid #fbbf24;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+.player-name {
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.player-status {
+    font-size: 0.85rem;
+    color: #fbbf24;
+    font-weight: 500;
+}
+
+/* Loading Animation */
+.loading-dots {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    background: #667eea;
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out;
+}
+
+.dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+/* Game Code Display in Center (optional - you can remove if you only want corner) */
+.game-code-center {
+    background: #f7fafc;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+    text-align: center;
+    border: 2px dashed #667eea;
+}
+
+.game-code-center span {
+    font-weight: 700;
+    color: #667eea;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+}
+
+/* Animations */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+    }
+
+    40% {
+        transform: scale(1);
+    }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .game-code-corner {
+        top: -2px;
+        right: -2px;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .waiting-icon {
+        font-size: 3.5rem;
+    }
+
+    .waiting-text h2 {
+        font-size: 1.5rem;
+    }
+
+    .players-status {
+        gap: 1.5rem;
     }
 }

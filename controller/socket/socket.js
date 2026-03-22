@@ -30,6 +30,7 @@ io.on('connection', (socket) => {
         }
 
         await game.socketConfig.push(socket.id);
+        await game.points.push({ Player: socket.id, points: 0 });
         await game.save();
 
         if (game.players.length >= 2) {
@@ -74,6 +75,10 @@ io.on('connection', (socket) => {
                 return;
             }
 
+            game.question.push(data.question);
+            game.options.push(data.correctAns);
+            await game.save();
+
             // Emit question to opponent with options
             socket.to(roomName).emit('opponentAskedQuestion', {
                 question: data.question,
@@ -102,6 +107,34 @@ io.on('connection', (socket) => {
                 return;
             }
 
+
+            const index = game.options.length - 1;
+            const correctAnswer = game.options[index];
+            const isCorrect = data.selectedOptionLabel === correctAnswer;
+
+            if (isCorrect) {
+                console.log('Answer is correct');
+
+                // Update points for the player who answered correctly
+                const playerPoints = game.points.find(p => p.Player === socket.id);
+
+                if (playerPoints) {
+                    playerPoints.points += 1;
+                    game.markModified('points');
+
+                    if (playerPoints.points >= 1) {
+                        await endGame(data.gameCode, socket.id);
+                        return;
+                    }
+
+                } else {
+                    game.points.push({ Player: socket.id, points: 1 });
+                }
+
+                await game.save();
+
+            }
+
             // The player who answered becomes the next to ask a question
             if (data.answeredBy) {
                 game.turnOf = data.answeredBy;
@@ -110,42 +143,10 @@ io.on('connection', (socket) => {
             }
 
             // Trigger the next question asking round
-            await askQuestions(data.gameCode);
-
-            // Switch turn to the other player for the next question
-            const otherPlayerSocketId = game.socketConfig.find(
-                socketId => socketId !== data.answeredBy
-            );
-            if (otherPlayerSocketId) {
-                game.turnOf = otherPlayerSocketId;
-                const game = await queAndAnsModel.findOne({ code: data.gameCode });
-
-                if (!game) {
-                    console.log(`Game with code ${data.gameCode} not found`);
-                    return;
-                }
-
-                if (data.userId) {
-                    // Switch turn to the other player (they get to ask the next question)
-                    const otherPlayerSocketId = game.socketConfig.find(
-                        socketId => socketId !== data.userId
-                    );
-                    if (otherPlayerSocketId) {
-                        game.turnOf = otherPlayerSocketId;
-                        await game.save();
-                        console.log('Switched turn to other player due to timeout:', game.turnOf);
-                    } else {
-                        console.log('Could not find other player to switch turn to');
-                    }
-                } else {
-                    console.log('No userId provided in notAnswered event');
-                }
-
-                // Notify the new player it's their turn to ask a question
+            setTimeout(async () => {
                 await askQuestions(data.gameCode);
-            } else {
-                console.log('Could not find other player to switch turn to');
-            }
+            }, 4000);
+
         } catch (error) {
             console.error('Error handling not answered:', error);
         }
@@ -174,6 +175,27 @@ io.on('connection', (socket) => {
             console.error('Error handling not answered:', error);
         }
     });
+
+
+
+    async function endGame(gameCode, winnerId) {
+        try {
+            const game = await queAndAnsModel.findOne({ code: gameCode });
+            if (!game) {
+                console.log(`Game with code ${gameCode} not found`);
+                return;
+            }
+            io.to(`game_${gameCode}`).emit('gameOver', { winner: winnerId });
+            await queAndAnsModel.deleteOne({ code: gameCode });
+        } catch (error) {
+            console.error('Error ending game:', error);
+        }
+    };
+
+
+
+
+
 
 
 
