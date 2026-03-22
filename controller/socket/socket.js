@@ -122,7 +122,7 @@ io.on('connection', (socket) => {
                     playerPoints.points += 1;
                     game.markModified('points');
 
-                    if (playerPoints.points >= 1) {
+                    if (playerPoints.points >= 3) {
                         await endGame(data.gameCode, socket.id);
                         return;
                     }
